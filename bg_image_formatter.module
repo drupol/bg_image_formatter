@@ -36,6 +36,18 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
 
+  $tokens_mapping = token_get_entity_mapping();
+  $entity_types = array_keys($field['bundles']);
+
+  $tokens_list = array();
+  foreach($tokens_mapping as $token_map => $entity_map) {
+    foreach ($entity_types as $entity_type) {
+      if ($entity_type == $entity_map) {
+        $tokens_list[] = $token_map;
+      }
+    }
+  }
+
   // Options for repeating the image
   $repeat_options = bg_image_css_repeat_options();
 
@@ -60,6 +72,20 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     '#title' => t('Selector'),
     '#description' => t('A valid CSS selector that will be used to apply the background image.'),
     '#default_value' => $settings['css_settings']['bg_image_selector'],
+  );
+  // Fieldset for tokens
+  $element['css_settings']['tokens'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Available tokens'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE
+  );
+  // Tokens available
+  $element['css_settings']['tokens']['list'] = array(
+    '#theme' => 'token_tree',
+    '#token_types' => $tokens_list,
+    '#global_types' => TRUE,
+    '#click_insert' => TRUE
   );
   // The selector for the background property
   $element['css_settings']['bg_image_color'] = array(
@@ -160,6 +186,9 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
   $settings = $display['settings'];
   $css_settings = $settings['css_settings'];
 
+  $tokens_mapping = array_flip(token_get_entity_mapping());
+  $css_settings['bg_image_selector'] = token_replace($css_settings['bg_image_selector'], array($tokens_mapping[$entity_type] => $entity));
+
   switch ($display['type']) {
     case 'bg_image_formatter':
       foreach ($items as $delta => $item) {
@@ -175,3 +204,4 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
 
   return $element;
 }
+
