@@ -58,6 +58,16 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     '#default_value' => $settings['image_style'],
     '#empty_option' => t('None (original image)'),
     '#options' => $image_styles,
+    '#description' => t(
+      'Select <a href="@href_image_style">the image style</a> to apply on' .
+      'images. If <em>None</em> is selected,' .
+      'it will use <a href="@href_bg_image">the default configuration set' .
+      'in the bg_image configuration page</a>.',
+      array(
+        '@href_image_style' => url('admin/config/media/image-styles'),
+        '@href_bg_image' => url('admin/config/content/background-image')
+      )
+    )
   );
 
   // Fieldset for css settings
@@ -178,6 +188,7 @@ function bg_image_formatter_field_formatter_settings_summary($field, $instance, 
 
   return implode('<br />', $summary);
 }
+
 /**
  * Implements hook_field_formatter_view().
  */
@@ -185,6 +196,8 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
   $element = array();
   $settings = $display['settings'];
   $css_settings = $settings['css_settings'];
+
+  $image_style = $settings['image_style'] ? $settings['image_style'] : NULL;
 
   $tokens_mapping = array_flip(token_get_entity_mapping());
   $css_settings['bg_image_selector'] = token_replace($css_settings['bg_image_selector'], array($tokens_mapping[$entity_type] => $entity));
@@ -196,7 +209,7 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
         // Let other module alter the CSS settings by implementing the hook:
         // hook_bg_image_formatter_css_settings_alter().
         drupal_alter('bg_image_formatter_css_settings', $css_settings, $context);
-        bg_image_add_background_image($item['uri'], $css_settings);
+        bg_image_add_background_image($item['uri'], $css_settings, $image_style);
       }
       break;
 
@@ -204,4 +217,3 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
 
   return $element;
 }
-
