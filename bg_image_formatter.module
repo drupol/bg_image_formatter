@@ -36,18 +36,6 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
 
-  $tokens_mapping = token_get_entity_mapping();
-  $entity_types = array_keys($field['bundles']);
-
-  $tokens_list = array();
-  foreach($tokens_mapping as $token_map => $entity_map) {
-    foreach ($entity_types as $entity_type) {
-      if ($entity_type == $entity_map) {
-        $tokens_list[] = $token_map;
-      }
-    }
-  }
-
   // Options for repeating the image
   $repeat_options = bg_image_css_repeat_options();
 
@@ -78,9 +66,9 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
   );
   // The selector for the background property
   $element['css_settings']['bg_image_selector'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Selector'),
-    '#description' => t('A valid CSS selector that will be used to apply the background image.'),
+    '#type' => 'textarea',
+    '#title' => t('Selector(s)'),
+    '#description' => t('A valid CSS selector that will be used to apply the background image. One per line. If the field is a multivalue field, the first line will be applied to the first value, the second to the second value... and so on.'),
     '#default_value' => $settings['css_settings']['bg_image_selector'],
   );
   // The selector for the background property
@@ -91,6 +79,18 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     '#default_value' => $settings['css_settings']['bg_image_color'],
   );
   if (module_exists('token')) {
+    $tokens_mapping = token_get_entity_mapping();
+    $entity_types = array_keys($field['bundles']);
+
+    $tokens_list = array();
+    foreach ($tokens_mapping as $token_map => $entity_map) {
+      foreach ($entity_types as $entity_type) {
+        if ($entity_type == $entity_map) {
+          $tokens_list[] = $token_map;
+        }
+      }
+    }
+
     // Fieldset for tokens
     $element['css_settings']['tokens'] = array(
       '#type' => 'fieldset',
@@ -165,6 +165,10 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
   );
 
   return $element;
+}
+
+function bg_image_formatter_field_formatter_settings_form_submit() {
+  dpm(func_get_args());
 }
 
 /**
