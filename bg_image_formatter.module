@@ -78,7 +78,7 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     '#description' => t('The background color formatted as any valid css color format (e.g. hex, rgb, text, hsl) [<a href="http://www.w3schools.com/css/pr_background-color.asp">css property: background-color</a>]'),
     '#default_value' => $settings['css_settings']['bg_image_color'],
   );
-  if (module_exists('token')) {
+  if (module_exists('token') && !empty($field)) {
     $tokens_mapping = token_get_entity_mapping();
     $entity_types = array_keys($field['bundles']);
 
@@ -165,10 +165,6 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
   );
 
   return $element;
-}
-
-function bg_image_formatter_field_formatter_settings_form_submit() {
-  dpm(func_get_args());
 }
 
 /**
