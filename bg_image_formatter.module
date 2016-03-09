@@ -209,7 +209,7 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     '#default_value' => $settings['css_settings']['bg_image_background_size'],
   );
 
-  // background-size:cover suppor for IE8.
+  // background-size:cover support for IE8.
   $css_settings['bg_image_background_size_ie8'] = array(
     '#type' => 'checkbox',
     '#title' => t('Add background-size:cover support for ie8'),
