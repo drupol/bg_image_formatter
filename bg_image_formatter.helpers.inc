@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Helper functions
+ * Helper functions.
  */
 
 /**
