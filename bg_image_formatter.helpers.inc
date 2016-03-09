@@ -12,10 +12,15 @@ function is_bg_image_formatter_display_type($display) {
 }
 
 /**
- * Get the textarea values in array format.
- *
- * @future
+ * Get the settings values in array format.
  */
-//function bg_image_formatter_extract_values(array $value, $key) {
-//  return explode(PHP_EOL, trim($value[$key]));
-//}
+function bg_image_formatter_extract_settings_values(array $settings, $key) {
+  $data = explode(PHP_EOL, trim($settings[$key]));
+
+  $data = array_map(function($value) {
+    $value = strip_tags($value);
+    return trim($value, ',');
+  }, $data);
+
+  return $data;
+}

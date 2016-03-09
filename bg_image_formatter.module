@@ -233,6 +233,8 @@ function bg_image_formatter_field_formatter_settings_summary($field, $instance, 
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
 
+  $css_settings = $settings['css_settings'];
+
   $summary = array();
 
   $image_styles = image_style_options(FALSE);
@@ -248,10 +250,9 @@ function bg_image_formatter_field_formatter_settings_summary($field, $instance, 
   }
 
   if (isset($settings['css_settings']['bg_image_selector'])) {
-    $selectors = explode(PHP_EOL, trim($settings['css_settings']['bg_image_selector']));
-    $selectors = array_map(function($value) {
-      return trim($value, ',');
-    }, $selectors);
+
+    $selectors = bg_image_formatter_extract_settings_values($css_settings, 'bg_image_selector');
+
     $summary[] = t('Selectors: @selectors', array('@selectors' => implode(',', $selectors)));
   }
 
@@ -274,26 +275,11 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
 
   $image_style = $settings['image_style'] ? $settings['image_style'] : NULL;
 
-  $selectors = explode(PHP_EOL, trim($css_settings['bg_image_selector']));
+  $selectors = bg_image_formatter_extract_settings_values($css_settings, 'bg_image_selector');
 
-  $classes = explode(PHP_EOL, trim($css_settings['classes']));
+  $classes = bg_image_formatter_extract_settings_values($css_settings, 'classes');
 
-  $colors = explode(PHP_EOL, trim($css_settings['bg_image_color']));
-
-  // Cleanup
-  $selectors = array_map(function($value) {
-    $value = strip_tags($value);
-    return trim($value, ',');
-  }, $selectors);
-
-  $classes = array_map(function($value) {
-    $value = strip_tags($value);
-    return trim($value, ',');
-  }, $classes);
-
-  $colors = array_map(function($value) {
-    return trim($value);
-  }, $colors);
+  $colors = bg_image_formatter_extract_settings_values($css_settings, 'bg_image_color');
 
   foreach ($items as $delta => $item) {
 
