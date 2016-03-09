@@ -10,6 +10,7 @@ require_once 'bg_image_formatter.helpers.inc';
  * Implements hook_field_formatter_info().
  */
 function bg_image_formatter_field_formatter_info() {
+
   $formatters = array(
     'bg_image_formatter' => array(
       'label' => t('Background image'),
@@ -41,7 +42,9 @@ function bg_image_formatter_field_formatter_info() {
  * Implements hook_field_formatter_settings_form().
  */
 function bg_image_formatter_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+
   $display = $instance['display'][$view_mode];
+
   $settings = $display['settings'];
 
   // Options for repeating the image.
@@ -55,6 +58,7 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
   );
 
   $image_styles = image_style_options();
+
   $element['image_style'] = array(
     '#title' => t('Image style'),
     '#type' => 'select',
@@ -129,12 +133,17 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
   );
 
   if (module_exists('token') && !empty($field)) {
+
     $tokens_mapping = token_get_entity_mapping();
+
     $entity_types = array_keys($field['bundles']);
 
     $tokens_list = array();
+
     foreach ($tokens_mapping as $token_map => $entity_map) {
+
       foreach ($entity_types as $entity_type) {
+
         if ($entity_type == $entity_map) {
           $tokens_list[] = $token_map;
         }
@@ -230,7 +239,9 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
  * Implements hook_field_formatter_settings_summary().
  */
 function bg_image_formatter_field_formatter_settings_summary($field, $instance, $view_mode) {
+
   $display = $instance['display'][$view_mode];
+
   $settings = $display['settings'];
 
   $css_settings = $settings['css_settings'];
@@ -238,8 +249,10 @@ function bg_image_formatter_field_formatter_settings_summary($field, $instance, 
   $summary = array();
 
   $image_styles = image_style_options(FALSE);
+
   // Unset possible 'No defined styles' option.
   unset($image_styles['']);
+
   // Styles could be lost because of enabled/disabled modules that defines,
   // their styles in code.
   if (isset($image_styles[$settings['image_style']])) {
@@ -263,6 +276,7 @@ function bg_image_formatter_field_formatter_settings_summary($field, $instance, 
  * Implements hook_field_formatter_view().
  */
 function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+
   $element = array();
 
   if (!is_bg_image_formatter_display_type($display)) {
@@ -290,7 +304,9 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
     }
 
     if (module_exists('token')) {
+
       $tokens_mapping = array_flip(token_get_entity_mapping());
+
       // Replace the tokens.
       $selectors = array_map(function($selector) use ($tokens_mapping, $entity_type, $entity) {
         return token_replace($selector, array($tokens_mapping[$entity_type] => $entity));
@@ -303,12 +319,17 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
 
     switch ($settings['bg_image_output_type']) {
       case 'css':
+
         if ($settings['multiple']) {
+
           $css_settings['bg_image_selector'] = $selectors[$delta % count($selectors)];
+
           $css_settings['bg_image_color'] = $colors[$delta % count($colors)];
         }
         else {
+
           $css_settings['bg_image_selector'] = implode(',', $selectors);
+
           $css_settings['bg_image_color'] = implode('', $colors);
         }
 
@@ -317,6 +338,7 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
         // Let other module alter the CSS settings by implementing the hook:
         // hook_bg_image_formatter_css_settings_alter().
         drupal_alter('bg_image_formatter_css_settings', $css_settings, $context);
+
         bg_image_add_background_image($item['uri'], $css_settings, $image_style);
 
         break;
@@ -333,8 +355,11 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
         }
 
         $render_array['#theme'] = 'container';
+
         $render_array['#attributes']['style'] = 'background-image: url("' . $image_url . '");';
+
         $element[$delta]['#markup'] = drupal_render($render_array);
+
         break;
     }
 
