@@ -10,8 +10,7 @@ require_once 'bg_image_formatter.helpers.inc';
  * Implements hook_field_formatter_info().
  */
 function bg_image_formatter_field_formatter_info() {
-
-  $formatters = array(
+  return array(
     'bg_image_formatter' => array(
       'label' => t('Background image'),
       'field types' => array('image', 'imagefield_crop'),
@@ -34,17 +33,13 @@ function bg_image_formatter_field_formatter_info() {
       ),
     ),
   );
-
-  return $formatters;
 }
 
 /**
  * Implements hook_field_formatter_settings_form().
  */
 function bg_image_formatter_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
-
   $display = $instance['display'][$view_mode];
-
   $settings = $display['settings'];
 
   // Options for repeating the image.
@@ -239,17 +234,12 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
  * Implements hook_field_formatter_settings_summary().
  */
 function bg_image_formatter_field_formatter_settings_summary($field, $instance, $view_mode) {
-
+  $summary = array();
   $display = $instance['display'][$view_mode];
-
   $settings = $display['settings'];
-
   $css_settings = $settings['css_settings'];
 
-  $summary = array();
-
   $image_styles = image_style_options(FALSE);
-
   // Unset possible 'No defined styles' option.
   unset($image_styles['']);
 
@@ -263,9 +253,7 @@ function bg_image_formatter_field_formatter_settings_summary($field, $instance, 
   }
 
   if (isset($settings['css_settings']['bg_image_selector'])) {
-
     $selectors = bg_image_formatter_extract_settings_values($css_settings, 'bg_image_selector');
-
     $summary[] = t('Selectors: @selectors', array('@selectors' => implode(',', $selectors)));
   }
 
@@ -276,7 +264,6 @@ function bg_image_formatter_field_formatter_settings_summary($field, $instance, 
  * Implements hook_field_formatter_view().
  */
 function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
-
   $element = array();
 
   if (!is_bg_image_formatter_display_type($display)) {
@@ -284,19 +271,14 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
   }
 
   $settings = $display['settings'];
-
   $css_settings = $settings['css_settings'];
-
   $image_style = $settings['image_style'] ? $settings['image_style'] : NULL;
 
   $selectors = bg_image_formatter_extract_settings_values($css_settings, 'bg_image_selector');
-
   $classes = bg_image_formatter_extract_settings_values($css_settings, 'classes');
-
   $colors = bg_image_formatter_extract_settings_values($css_settings, 'bg_image_color');
 
   foreach ($items as $delta => $item) {
-
     $image_url = file_create_url($item['uri']);
 
     if (!empty($settings['image_style'])) {
@@ -304,32 +286,26 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
     }
 
     if (module_exists('token')) {
-
       $tokens_mapping = array_flip(token_get_entity_mapping());
 
       // Replace the tokens.
-      $selectors = array_map(function($selector) use ($tokens_mapping, $entity_type, $entity) {
+      $selectors = array_map(function ($selector) use ($tokens_mapping, $entity_type, $entity) {
         return token_replace($selector, array($tokens_mapping[$entity_type] => $entity));
       }, $selectors);
 
-      $colors = array_map(function($color) use ($tokens_mapping, $entity_type, $entity) {
+      $colors = array_map(function ($color) use ($tokens_mapping, $entity_type, $entity) {
         return token_replace($color, array($tokens_mapping[$entity_type] => $entity));
       }, $colors);
     }
 
     switch ($settings['bg_image_output_type']) {
       case 'css':
-
         if ($settings['multiple']) {
-
           $css_settings['bg_image_selector'] = $selectors[$delta % count($selectors)];
-
           $css_settings['bg_image_color'] = $colors[$delta % count($colors)];
         }
         else {
-
           $css_settings['bg_image_selector'] = implode(',', $selectors);
-
           $css_settings['bg_image_color'] = implode('', $colors);
         }
 
@@ -340,11 +316,9 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
         drupal_alter('bg_image_formatter_css_settings', $css_settings, $context);
 
         bg_image_add_background_image($item['uri'], $css_settings, $image_style);
-
         break;
 
       case 'inline':
-
         $render_array = [];
 
         if ($settings['multiple']) {
@@ -355,14 +329,10 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
         }
 
         $render_array['#theme'] = 'container';
-
         $render_array['#attributes']['style'] = 'background-image: url("' . $image_url . '");';
-
         $element[$delta]['#markup'] = drupal_render($render_array);
-
         break;
     }
-
   }
 
   return $element;
