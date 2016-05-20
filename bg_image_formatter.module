@@ -52,14 +52,12 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     '%multiple' => t('Multiple'),
   );
 
-  $image_styles = image_style_options();
-
   $element['image_style'] = array(
     '#title' => t('Image style'),
     '#type' => 'select',
     '#default_value' => $settings['image_style'],
     '#empty_option' => t('None (original image)'),
-    '#options' => $image_styles,
+    '#options' => image_style_options(),
     '#description' => t('Select !image_styles_link to apply on images. If %none is selected, it will use !bg_image_link.',
       $placeholders
     ),
@@ -128,17 +126,12 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
   );
 
   if (module_exists('token') && !empty($field)) {
-
     $tokens_mapping = token_get_entity_mapping();
-
     $entity_types = array_keys($field['bundles']);
-
     $tokens_list = array();
 
     foreach ($tokens_mapping as $token_map => $entity_map) {
-
       foreach ($entity_types as $entity_type) {
-
         if ($entity_type == $entity_map) {
           $tokens_list[] = $token_map;
         }
