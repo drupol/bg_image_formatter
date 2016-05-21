@@ -5,13 +5,6 @@
  */
 
 /**
- * Is the formatter for this module.
- */
-function is_bg_image_formatter_display_type($display) {
-  return $display['type'] == 'bg_image_formatter';
-}
-
-/**
  * Get the settings values in array format.
  */
 function bg_image_formatter_extract_settings_values(array $settings, $key) {

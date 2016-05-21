@@ -236,13 +236,20 @@ function bg_image_formatter_field_formatter_settings_summary($field, $instance, 
   // Unset possible 'No defined styles' option.
   unset($image_styles['']);
 
+  if ($settings['bg_image_output_type'] == 'css') {
+    $summary[] = t('Display: CSS and selectors.');
+  }
+  else {
+    $summary[] = t('Display: Inline.');
+  }
+
   // Styles could be lost because of enabled/disabled modules that defines,
   // their styles in code.
   if (isset($image_styles[$settings['image_style']])) {
-    $summary[] = t('URL for image style: @style', array('@style' => $image_styles[$settings['image_style']]));
+    $summary[] = t('Image style: @style', array('@style' => $image_styles[$settings['image_style']]));
   }
   else {
-    $summary[] = t('Original image URL');
+    $summary[] = t('Image style: Original');
   }
 
   if (isset($settings['css_settings']['bg_image_selector'])) {
@@ -258,10 +265,6 @@ function bg_image_formatter_field_formatter_settings_summary($field, $instance, 
  */
 function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
-
-  if (!is_bg_image_formatter_display_type($display)) {
-    return $element;
-  }
 
   $settings = $display['settings'];
   $css_settings = $settings['css_settings'];
@@ -312,18 +315,13 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
         break;
 
       case 'inline':
-        $render_array = [];
-
-        if ($settings['multiple']) {
-          $render_array['#attributes']['class'] = $classes[$delta % count($classes)];
-        }
-        else {
-          $render_array['#attributes']['class'] = $classes;
-        }
-
-        $render_array['#theme'] = 'container';
-        $render_array['#attributes']['style'] = 'background-image: url("' . $image_url . '");';
-        $element[$delta]['#markup'] = drupal_render($render_array);
+        $element[$delta] = array(
+          '#theme' => 'container',
+          '#attributes' => array(
+            'style' => sprintf('background-image: url("%s");', $image_url),
+            'class' => (bool) $settings['multiple'] ? $classes[$delta % count($classes)] : $classes,
+          ),
+        );
         break;
     }
   }
