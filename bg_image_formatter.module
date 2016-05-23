@@ -314,7 +314,6 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
         // hook_bg_image_formatter_css_settings_alter().
         drupal_alter('bg_image_formatter_css_settings', $css_settings, $context);
 
-
         if ($css = bg_image_formatter_add_background_image_css($item['uri'], $css_settings, $image_style)) {
           $element[0]['#attached'] = array(
             'css' => array(
@@ -322,11 +321,12 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
                 'type' => $css['type'],
                 'media' => $css['media'],
                 'group' => $css['group'],
-              )
-            )
+              ),
+            ),
           );
         }
         break;
+
       case 'inline':
         $element[$delta] = array(
           '#theme' => 'container',
