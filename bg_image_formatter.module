@@ -19,6 +19,7 @@ function bg_image_formatter_field_formatter_info() {
         'multiple' => FALSE,
         'bg_image_output_type' => 'css',
         'css_settings' => array(
+          'classes' => '',
           'bg_image_selector' => 'body',
           'bg_image_color' => '#FFFFFF',
           'bg_image_x' => 'left',
@@ -182,7 +183,12 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     '#type' => 'radios',
     '#title' => t('Background Repeat'),
     '#description' => t('Define the repeat settings for the background image. [<a href="http://www.w3schools.com/css/pr_background-repeat.asp">css property: background-repeat</a>]'),
-    '#options' => bg_image_css_repeat_options(),
+    '#options' => array(
+      'no-repeat' => t('No Repeat'),
+      'repeat' => t('Tiled (repeat)'),
+      'repeat-x' => t('Repeat Horizontally (repeat-x)'),
+      'repeat-y' => t('Repeat Vertically (repeat-y)'),
+    ),
     '#default_value' => $settings['css_settings']['bg_image_repeat'],
   );
 
@@ -308,9 +314,19 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
         // hook_bg_image_formatter_css_settings_alter().
         drupal_alter('bg_image_formatter_css_settings', $css_settings, $context);
 
-        bg_image_formatter_add_background_image_css($item['uri'], $css_settings, $image_style);
-        break;
 
+        if ($css = bg_image_formatter_add_background_image_css($item['uri'], $css_settings, $image_style)) {
+          $element[0]['#attached'] = array(
+            'css' => array(
+              $css['style'] => array(
+                'type' => $css['type'],
+                'media' => $css['media'],
+                'group' => $css['group'],
+              )
+            )
+          );
+        }
+        break;
       case 'inline':
         $element[$delta] = array(
           '#theme' => 'container',

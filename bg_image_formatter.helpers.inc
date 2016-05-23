@@ -108,12 +108,16 @@ function bg_image_formatter_add_background_image_css($image_path, $css_settings 
     $style .= $bg_size;
     $style .= $background_size_ie8 ? $ie_bg_size : '';
     $style .= "}";
-    drupal_add_css($style, array('type' => 'inline', 'media' => $media_query, 'group' => CSS_THEME));
-    return TRUE;
+
+    return array(
+      'type' => 'inline',
+      'style' => $style,
+      'media' => $media_query,
+      'group' => CSS_THEME,
+    );
   }
-  else {
-    return FALSE;
-  }
+
+  return FALSE;
 }
 
 /**
