@@ -116,10 +116,18 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
   );
 
   // The selector for the background property.
+  $link = l(t('css property: background-color'), 'https://www.w3.org/TR/css3-background', array(
+    'external' => TRUE,
+    'fragment' => 'the-background-color',
+    'attributes' => array(
+      'target' => '_blank',
+    ),
+  ));
+
   $css_settings['bg_image_color'] = array(
     '#type' => 'textarea',
     '#title' => t('Color'),
-    '#description' => t('The background color formatted as any valid css color format (e.g. hex, rgb, text, hsl) [<a href="@url">css property: background-color</a>]. One per line. If the field is multiple and the option %multiple is enabled, the first line will be applied to the first value, the second to the second value... and so on.', array('@url' => 'http://www.w3schools.com/css/pr_background-color.asp')),
+    '#description' => t('The background color formatted as any valid css color format (e.g. hex, rgb, text, hsl) [!link]. One per line. If the field is multiple and the option %multiple is enabled, the first line will be applied to the first value, the second to the second value... and so on.', array('!link' => $link)),
     '#default_value' => $settings['css_settings']['bg_image_color'],
   );
 
@@ -154,35 +162,58 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
   }
 
   // The selector for the background property.
+  $link = l(t('css property: background-position'), 'https://www.w3.org/TR/css3-background', array(
+    'external' => TRUE,
+    'fragment' => 'the-background-position',
+    'attributes' => array(
+      'target' => '_blank',
+    ),
+  ));
+
   $css_settings['bg_image_x'] = array(
     '#type' => 'textfield',
     '#title' => t('Horizontal Alignment'),
-    '#description' => t('The horizontal alignment of the background image formatted as any valid css alignment. [<a href="http://www.w3schools.com/css/pr_background-position.asp">css property: background-position</a>]'),
+    '#description' => t('The horizontal alignment of the background image formatted as any valid css alignment. [!link]', array('!link' => $link)),
     '#default_value' => $settings['css_settings']['bg_image_x'],
   );
 
-  // The selector for the background property.
   $css_settings['bg_image_y'] = array(
     '#type' => 'textfield',
     '#title' => t('Vertical Alignment'),
-    '#description' => t('The vertical alignment of the background image formatted as any valid css alignment. [<a href="http://www.w3schools.com/css/pr_background-position.asp">css property: background-position</a>]'),
+    '#description' => t('The vertical alignment of the background image formatted as any valid css alignment. [!link]', array('!link' => $link)),
     '#default_value' => $settings['css_settings']['bg_image_y'],
   );
 
   // The selector for the background property.
+  $link = l(t('css property: background-attachment'), 'https://www.w3.org/TR/css3-background', array(
+    'external' => TRUE,
+    'fragment' => 'the-background-attachment',
+    'attributes' => array(
+      'target' => '_blank',
+    ),
+  ));
+
   $css_settings['bg_image_attachment'] = array(
     '#type' => 'radios',
     '#title' => t('Background Attachment'),
-    '#description' => t('The attachment setting for the background image. [<a href="http://www.w3schools.com/css/pr_background-attachment.asp">css property: background-attachment</a>]'),
+    '#description' => t('The attachment setting for the background image. [!link]', array('!link' => $link)),
     '#options' => array('scroll' => 'Scroll', 'fixed' => 'Fixed'),
     '#default_value' => $settings['css_settings']['bg_image_attachment'],
   );
 
   // The background-repeat property.
+  $link = l(t('css property: background-repeat'), 'https://www.w3.org/TR/css3-background', array(
+    'external' => TRUE,
+    'fragment' => 'the-background-repeat',
+    'attributes' => array(
+      'target' => '_blank',
+    ),
+  ));
+
   $css_settings['bg_image_repeat'] = array(
     '#type' => 'radios',
     '#title' => t('Background Repeat'),
-    '#description' => t('Define the repeat settings for the background image. [<a href="http://www.w3schools.com/css/pr_background-repeat.asp">css property: background-repeat</a>]'),
+    '#description' => t('Define the repeat settings for the background image. [!link]', array('!link' => $link)),
     '#options' => array(
       'no-repeat' => t('No Repeat'),
       'repeat' => t('Tiled (repeat)'),
@@ -192,11 +223,19 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     '#default_value' => $settings['css_settings']['bg_image_repeat'],
   );
 
+  $link = l(t('css property: background-size'), 'https://www.w3.org/TR/css3-background', array(
+    'external' => TRUE,
+    'fragment' => 'the-background-size',
+    'attributes' => array(
+      'target' => '_blank',
+    ),
+  ));
+
   // The background-size property.
   $css_settings['bg_image_background_size'] = array(
     '#type' => 'textfield',
     '#title' => t('Background Size'),
-    '#description' => t('The size of the background (NOTE: CSS3 only. Useful for responsive designs) [<a href="http://www.w3schools.com/cssref/css3_pr_background-size.asp">css property: background-size</a>]'),
+    '#description' => t('The size of the background (NOTE: CSS3 only. Useful for responsive designs) [!link]', array('!link' => $link)),
     '#default_value' => $settings['css_settings']['bg_image_background_size'],
   );
 
@@ -209,10 +248,17 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
   );
 
   // The media query specifics.
+  $link = l(t('Read about media queries'), 'https://www.w3.org/TR/css3-mediaqueries', array(
+    'external' => TRUE,
+    'attributes' => array(
+      'target' => '_blank',
+    ),
+  ));
+
   $css_settings['bg_image_media_query'] = array(
     '#type' => 'textfield',
     '#title' => t('Media Query'),
-    '#description' => t('Apply this background image css using a media query. CSS3 Only. Useful for responsive designs. example: only screen and (min-width:481px) and (max-width:768px) [<a href="http://www.w3.org/TR/css3-mediaqueries/">Read about media queries</a>]'),
+    '#description' => t('Apply this background image css using a media query. CSS3 Only. Useful for responsive designs. example: only screen and (min-width:481px) and (max-width:768px) [!link]', array('!link' => $link)),
     '#default_value' => $settings['css_settings']['bg_image_media_query'],
   );
 
