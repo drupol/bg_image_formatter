@@ -48,6 +48,7 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     '!bg_image_link' => l(t('the default configuration set in the bg_image configuration page'), '/admin/config/content/background-image'),
     '%none' => t('None'),
     '%multiple' => t('Multiple'),
+    '!break' => '<br/>',
   );
 
   $element['image_style'] = array(
@@ -80,11 +81,21 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     '#description' => t('Define how background-image will be printed to the dom.'),
   );
 
+  // The CSS background-color property.
+  $link = l(t('https://www.w3.org/TR/css3-background'), 'https://www.w3.org/TR/css3-background', array(
+    'external' => TRUE,
+    'attributes' => array(
+      'target' => '_blank',
+    ),
+  ));
+
   // Fieldset for css settings.
   $element['css_settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('Default CSS Settings'),
-    '#description' => t('Default CSS settings for outputting the background property. These settings will be concatenated to form a complete css statement that uses the "background" property. For more information on the css background property see http://www.w3schools.com/css/css_background.asp"'),
+    '#description' => t('Default CSS settings for outputting the background property. !break
+    These settings will be concatenated to form a complete css statement that uses the "background" property. !break
+    For more information on the css background property see !link', array('!link' => $link, '!break' => '<br/>')),
   );
 
   $css_settings = &$element['css_settings'];
@@ -93,7 +104,9 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
   $css_settings['bg_image_selector'] = array(
     '#type' => 'textarea',
     '#title' => t('Selector(s)'),
-    '#description' => t('A valid CSS selector that will be used to apply the background image. One per line. If the field is multiple and the option %multiple is enabled, the first line will be applied to the first value, the second to the second value... and so on.', $placeholders),
+    '#description' => t('A valid CSS selector that will be used to apply the background image. One per line. !break
+    If the field is multiple and the option %multiple is enabled, the first line will be applied to the first value, !break
+    the second to the second value... and so on.', $placeholders),
     '#default_value' => $settings['css_settings']['bg_image_selector'],
     '#states' => array(
       'visible' => array(
@@ -102,11 +115,12 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     ),
   );
 
-  // The selector for the background property.
   $css_settings['classes'] = array(
     '#type' => 'textarea',
     '#title' => t('Classes'),
-    '#description' => t('The class that will be used to apply the background image. One per line. If the field is multiple and the option %multiple is enabled, the first line will be applied to the first value, the second to the second value... and so on.', $placeholders),
+    '#description' => t('The class that will be used to apply the background image. One per line. !break
+    If the field is multiple and the option %multiple is enabled, the first line will be applied to the first value, !break
+    the second to the second value... and so on.', $placeholders),
     '#default_value' => $settings['css_settings']['classes'],
     '#states' => array(
       'visible' => array(
@@ -115,10 +129,10 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     ),
   );
 
-  // The selector for the background property.
+  // The CSS background-color property.
   $link = l(t('css property: background-color'), 'https://www.w3.org/TR/css3-background', array(
     'external' => TRUE,
-    'fragment' => 'the-background-color',
+    'fragment' => 'background-color',
     'attributes' => array(
       'target' => '_blank',
     ),
@@ -127,7 +141,9 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
   $css_settings['bg_image_color'] = array(
     '#type' => 'textarea',
     '#title' => t('Color'),
-    '#description' => t('The background color formatted as any valid css color format (e.g. hex, rgb, text, hsl) [!link]. One per line. If the field is multiple and the option %multiple is enabled, the first line will be applied to the first value, the second to the second value... and so on.', array('!link' => $link)),
+    '#description' => t('The background color formatted as any valid css color format (e.g. hex, rgb, text, hsl) [!link]. One per line. !break
+    If the field is multiple and the option %multiple is enabled, the first line will be applied to the first value, !break
+    the second to the second value... and so on.', array('!link' => $link, '!break' => '<br/>')),
     '#default_value' => $settings['css_settings']['bg_image_color'],
   );
 
@@ -161,10 +177,10 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     );
   }
 
-  // The selector for the background property.
+  // The CSS background-position property.
   $link = l(t('css property: background-position'), 'https://www.w3.org/TR/css3-background', array(
     'external' => TRUE,
-    'fragment' => 'the-background-position',
+    'fragment' => 'background-position',
     'attributes' => array(
       'target' => '_blank',
     ),
@@ -184,10 +200,10 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     '#default_value' => $settings['css_settings']['bg_image_y'],
   );
 
-  // The selector for the background property.
+  // The CSS background-attachment property.
   $link = l(t('css property: background-attachment'), 'https://www.w3.org/TR/css3-background', array(
     'external' => TRUE,
-    'fragment' => 'the-background-attachment',
+    'fragment' => 'background-attachment',
     'attributes' => array(
       'target' => '_blank',
     ),
@@ -201,10 +217,10 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     '#default_value' => $settings['css_settings']['bg_image_attachment'],
   );
 
-  // The background-repeat property.
+  // The CSS background-repeat property.
   $link = l(t('css property: background-repeat'), 'https://www.w3.org/TR/css3-background', array(
     'external' => TRUE,
-    'fragment' => 'the-background-repeat',
+    'fragment' => 'background-repeat',
     'attributes' => array(
       'target' => '_blank',
     ),
@@ -223,9 +239,10 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     '#default_value' => $settings['css_settings']['bg_image_repeat'],
   );
 
+  // The CSS background-size property.
   $link = l(t('css property: background-size'), 'https://www.w3.org/TR/css3-background', array(
     'external' => TRUE,
-    'fragment' => 'the-background-size',
+    'fragment' => 'background-size',
     'attributes' => array(
       'target' => '_blank',
     ),
@@ -239,11 +256,21 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
     '#default_value' => $settings['css_settings']['bg_image_background_size'],
   );
 
+  // IE filters link.
+  $link = l(t('AlphaImageLoader Filter'), 'http://msdn.microsoft.com/en-us/library/ms532969%28v=vs.85%29.aspx', array(
+    'external' => TRUE,
+    'attributes' => array(
+      'target' => '_blank',
+    ),
+  ));
+
   // background-size:cover support for IE8.
   $css_settings['bg_image_background_size_ie8'] = array(
     '#type' => 'checkbox',
     '#title' => t('Add background-size:cover support for ie8'),
-    '#description' => t("The background-size css property is only supported on browsers that support CSS3. However, there is a workaround for IE using Internet Explorer's built-in filters (http://msdn.microsoft.com/en-us/library/ms532969%28v=vs.85%29.aspx). Check this box to add the filters to the css. Sometimes it works well, sometimes it doesn't. Use at your own risk"),
+    '#description' => t("The background-size css property is only supported on browsers that support CSS3. !break
+    However, there is a workaround for IE using Internet Explorer's built-in filters (!link). !break
+    Check this box to add the filters to the css. Sometimes it works well, sometimes it doesn't. Use at your own risk", array('!link' => $link, '!break' => '<br/>')),
     '#default_value' => $settings['css_settings']['bg_image_background_size_ie8'],
   );
 
@@ -258,7 +285,8 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
   $css_settings['bg_image_media_query'] = array(
     '#type' => 'textfield',
     '#title' => t('Media Query'),
-    '#description' => t('Apply this background image css using a media query. CSS3 Only. Useful for responsive designs. example: only screen and (min-width:481px) and (max-width:768px) [!link]', array('!link' => $link)),
+    '#description' => t('Apply this background image css using a media query. CSS3 Only. !break
+    Useful for responsive designs. example: only screen and (min-width:481px) and (max-width:768px) [!link]', array('!link' => $link, '!break' => '<br/>')),
     '#default_value' => $settings['css_settings']['bg_image_media_query'],
   );
 
