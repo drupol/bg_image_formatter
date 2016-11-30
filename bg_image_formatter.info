@@ -1,3 +1,4 @@
 name = Background Images Formatter
 description = Background Images Formatter provides an image formatter to display images in background.
 core = "7.x"
+php = 5.3
