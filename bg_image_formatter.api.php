@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Hooks for the bg_image_formatter module.
