@@ -9,11 +9,22 @@
  * Get the settings values in array format.
  */
 function bg_image_formatter_extract_settings_values(array $settings, $key) {
-  if(isset($settings[$key])) {
-    return array_map(function ($value) {
-      $value = strip_tags($value);
-      return trim($value, ',');
-    }, explode(PHP_EOL, trim($settings[$key])));
+  if (isset($settings[$key])) {
+    return array_filter(
+      array_map(
+        function ($value) {
+          return trim(
+            strip_tags($value),
+            ','
+          );
+        },
+        explode(
+          PHP_EOL,
+          trim($settings[$key]
+          )
+        )
+      )
+    );
   }
 }
 
