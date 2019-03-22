@@ -183,7 +183,7 @@ function bg_image_formatter_field_formatter_settings_form($field, $instance, $vi
 
     foreach ($tokens_mapping as $token_map => $entity_map) {
       foreach ($entity_types as $entity_type) {
-        if ($entity_type == $entity_map) {
+        if ($entity_type === $entity_map) {
           $tokens_list[] = $token_map;
         }
       }
@@ -342,7 +342,7 @@ function bg_image_formatter_field_formatter_settings_summary($field, $instance, 
   // Unset possible 'No defined styles' option.
   unset($image_styles['']);
 
-  if ($settings['bg_image_output_type'] == 'css') {
+  if ($settings['bg_image_output_type'] === 'css') {
     $summary[] = t('Display: CSS and selectors.');
   }
   else {
@@ -428,6 +428,7 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
             ),
           );
         }
+
         break;
 
       case 'inline':
@@ -452,6 +453,7 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
         );
 
         $element[$delta]['#attributes'] = array_filter($element[$delta]['#attributes']);
+
         break;
     }
   }

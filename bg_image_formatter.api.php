@@ -13,6 +13,5 @@
  * @param array $context
  *   The context : entity_type, entity, item.
  */
-function hook_bg_image_formatter_css_settings_alter($css_settings, $context) {
-
+function hook_bg_image_formatter_css_settings_alter(array $css_settings, array $context) {
 }
