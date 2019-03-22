@@ -143,7 +143,7 @@ function _bg_image_formatter_path_to_uri($path) {
   // Strip off the protocol and domain.
   $relative_path = parse_url($path, PHP_URL_PATH);
   // The public files directory (as configured).
-  $file_public_path = '/' . variable_get('file_public_path', 'sites/default/files');
+  $file_public_path = '/' . config_get('system.core', 'file_public_path');
   // Remove the public path if the path starts with it.
   if (strpos($relative_path, $file_public_path) === 0) {
     $relative_path = str_replace($file_public_path, '', $relative_path);

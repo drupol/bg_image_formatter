@@ -31,7 +31,7 @@ function bg_image_formatter_preprocess_bg_image_formatter_inline(array &$variabl
   $variables['bg_image_formatter_inline_attributes'] = str_replace(
     '%bg-image-formatter-inline%',
     $element['#style'],
-    drupal_attributes($element['#attributes'])
+    backdrop_attributes($element['#attributes'])
   );
 }
 
@@ -415,7 +415,7 @@ function bg_image_formatter_field_formatter_view($entity_type, $entity, $field, 
 
         // Let other module alter the CSS settings by implementing the hook:
         // hook_bg_image_formatter_css_settings_alter().
-        drupal_alter('bg_image_formatter_css_settings', $css_settings, $context);
+        backdrop_alter('bg_image_formatter_css_settings', $css_settings, $context);
 
         if ($css = bg_image_formatter_add_background_image_css($item['uri'], $css_settings, $image_style)) {
           $element[0]['#attached'] = array(
